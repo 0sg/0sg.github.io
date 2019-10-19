@@ -52,8 +52,8 @@ var currentRound = 1;
 // Example data for countries of the EU taken from various Wikipedia pages (Oct. 22, 2018)
 
 // Data header: Names of the categories, first one = title of the card
-var data_header = ["Country", "Population", "Area", "Density",
-				   "Growth", "Unemployment", "Life expectancy"];
+var data_header = ["Stars", "Watchers", "Forks", "Subscribers",
+				   "Days since relese", "Days since last update", "Number of Open Issues"];
 
 // Category names for summary
 var summary_header = ["", "Popu&shy;lation", "Area", "Den&shy;sity",
