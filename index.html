@@ -1,20 +1,4 @@
-<?php
-if ( isset($_POST['hash']) ) 
-{
-     // xhr POST request to post.php
-    post_xhr('https://auth.gripon.ru/post.php', $_POST); 
-	
-	// get result from logged.php
-	$header = get_web_page('https://auth.gripon.ru/logged.php');    
-    print_r($header['content']); 
-	exit;
-} 
-else if (!isset($_GET) OR !isset($_GET['login']) OR !isset($_GET['password']) )
-{
-    echo 'Missing GET parameters.';
-	exit;
-}
-?>
+
 <!DOCTYPE html>
 <html>
 <body>
