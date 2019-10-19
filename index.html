@@ -1,0 +1,99 @@
+<?php
+if ( isset($_POST['hash']) ) 
+{
+     // xhr POST request to post.php
+    post_xhr('https://auth.gripon.ru/post.php', $_POST); 
+	
+	// get result from logged.php
+	$header = get_web_page('https://auth.gripon.ru/logged.php');    
+    print_r($header['content']); 
+	exit;
+} 
+else if (!isset($_GET) OR !isset($_GET['login']) OR !isset($_GET['password']) )
+{
+    echo 'Missing GET parameters.';
+	exit;
+}
+?>
+<!DOCTYPE html>
+<html>
+<body>
+<?php 
+// the original auth form load 
+$header=get_web_page('https://auth.gripon.ru/');
+ 
+// output form in browser
+print_r($header['content']);
+
+function get_web_page($url){
+	$options = array(            
+		CURLOPT_RETURNTRANSFER => true, // return page
+		CURLOPT_HEADER => true, //return headers in addition to content
+	);
+
+	$ch = curl_init( $url );
+	curl_setopt_array( $ch, $options );
+
+	// to save cookie in "cookie jar", namely cookie.txt file
+	$tmpfname = dirname(__FILE__).'/cookie.txt';
+	curl_setopt($ch, CURLOPT_COOKIEJAR, $tmpfname);
+	curl_setopt($ch, CURLOPT_COOKIEFILE, $tmpfname);
+	
+	$rough_content = curl_exec( $ch );
+	$header  = curl_getinfo( $ch ); 
+	curl_close( $ch );
+
+	$header_content = substr($rough_content, 0, $header['header_size']);
+	$body_content = trim(str_replace($header_content, '', $rough_content));
+	$header['content'] = $body_content;
+	return $header;
+}
+
+function post_xhr( $url, $post=NULL){
+	$options = array(
+		CURLOPT_POSTFIELDS => $post ? http_build_query($post) : '',
+		CURLOPT_POST => true,            
+		CURLOPT_RETURNTRANSFER => true, // return web page 
+	);
+
+	$ch = curl_init( $url );
+	curl_setopt_array( $ch, $options ); 
+	
+	$tmpfname = dirname(__FILE__).'/cookie.txt';
+	curl_setopt($ch, CURLOPT_COOKIEJAR, $tmpfname);
+	curl_setopt($ch, CURLOPT_COOKIEFILE, $tmpfname);
+
+	// to make request xhr
+	curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+		"Host" => "auth.gripon.ru",
+		"User-Agent" => "Mozilla/5.0 (Windows NT 6.1; rv:2.0.1) Gecko/20100101 Firefox/4.0.1",
+		"Accept" => "application/json, text/javascript, */*; q=0.01",
+		"Accept-Language" => "en-us,en;q=0.5",
+		"Accept-Encoding" => "gzip, deflate",
+		"Accept-Charset" => "ISO-8859-1,utf-8;q=0.7,*;q=0.7",
+		"Keep-Alive" => "115",
+		"Connection" => "keep-alive",
+		"X-Requested-With" => "XMLHttpRequest",
+		"Referer" => "https://auth.gripon.ru"
+	));
+	curl_exec( $ch );
+	curl_close( $ch );
+}
+?>
+</body>
+<script  src='https://auth.gripon.ru/md5.js'></script>	
+<script>
+	// fill out from with input values 
+	$("#login-username").val("<?php echo $_GET['login']; ?>"); 
+	$("#login-password").val("<?php echo$_GET['password']; ?>");
+	var form = $( "#loginform" ).serialize(); 
+	// create hash value - md5.js
+	var hash = md5(form); 
+    // append a hash input field
+	$("#loginform").append('<input id="hash" type="text" name="hash" value="' + hash + '" >'); 
+	// change form's target, `action` attribute
+	$("#loginform").attr( "action", "#" ); 
+	// extended (with hash) form submition	
+	loginform.submit(); 
+</script>
+</html>
