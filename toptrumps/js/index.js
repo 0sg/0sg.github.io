@@ -60,7 +60,7 @@ var summary_header = ["", "Popu&shy;lation", "Area", "Den&shy;sity",
 					  "Growth", "Unem&shy;ploy&shy;ment", "Life ex&shy;pectancy"];
 
 // Units if necessary, first entry always empty
-var data_suffix = ["", " mio.", " km\u00B2", "", " %", " %", " yrs"];
+var data_suffix = ["", "", "", "", "", "", ""];
 
 // Specify which number wins: larger or smaller, first entry always empty
 var data_comparison = ["", "larger", "larger", "larger", "larger", "smaller", "larger"];
