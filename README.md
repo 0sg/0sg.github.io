@@ -1,7 +1,6 @@
 # Old Skool Games With A Github twist
 
-One Paragraph of project description goes here
-
+So for this hackathton I've decided to make a game that works in the broswer but you level up usinf stats from your github
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
